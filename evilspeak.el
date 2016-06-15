@@ -8,17 +8,29 @@
 ;; ;; set by the `evil-define-motion' macro.
 (require 'evil)
 
+(defun evilspeak-speak-line (&optional count)
+  (emacspeak-speak-line count))
+
+(defun evilspeak-speak-char ()
+  (emacspeak-speak-char t))
+
+(defun evilspeak-speak-word ()
+  (emacspeak-speak-word))
+
+(defun evilspeak-speak-paragraph ()
+  (emacspeak-speak-paragraph))
+
 (evil-define-motion evilspeak-next-line (count)
   "Move the cursor COUNT lines down."
   :type line
   (evil-next-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-previous-line (count)
   "Move the cursor COUNT lines up."
   :type line
   (evil-previous-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 ;;; Code:
 (evil-define-motion evilspeak-forward-char (count &optional crosslines noerror)
@@ -28,7 +40,7 @@ If NOERROR is non-nil, don't signal an error upon reaching the end
 of the line or the buffer; just return nil."
   :type exclusive
   (evil-forward-char count crosslines noerror)
-  (emacspeak-speak-char t))
+  (evilspeak-speak-char))
 
 (evil-define-motion evilspeak-backward-char (count &optional crosslines noerror)
   "Move cursor to the left by COUNT characters.
@@ -37,59 +49,59 @@ If NOERROR is non-nil, don't signal an error upon reaching the beginning
 of the line or the buffer; just return nil."
   :type exclusive
   (evil-backward-char count crosslines noerror)
-  (emacspeak-speak-char t))
+  (evilspeak-speak-char))
 
 
 (evil-define-motion evilspeak-next-visual-line (count)
   "Move the cursor COUNT screen lines down."
   :type exclusive
   (evil-next-visual-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-previous-visual-line (count)
   "Move the cursor COUNT screen lines down."
   :type exclusive
   (evil-previous-visual-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 ;; used for repeated commands like "dd"
 (evil-define-motion evilspeak-line (count)
   "Move COUNT - 1 lines down."
   :type line
   (evil-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-beginning-of-line ()
   "Move the cursor to the beginning of the current line."
   :type exclusive
   (evil-beginning-of-line)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-end-of-line (count)
   "Move the cursor to the end of the current line.
 If COUNT is given, move COUNT - 1 lines downward first."
   :type inclusive
   (evil-end-of-line)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-beginning-of-visual-line ()
   "Move the cursor to the first character of the current screen line."
   :type exclusive
   (evil-beginning-of-visual-line)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-end-of-visual-line (count)
   "Move the cursor to the last character of the current screen line.
 If COUNT is given, move COUNT - 1 screen lines downward first."
   :type inclusive
   (evil-end-of-visual-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-middle-of-visual-line ()
   "Move the cursor to the middle of the current visual line."
   :type exclusive
   (evil-middle-of-visual-line)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-beginning-of-line-or-digit-argument ()
   "Move the cursor to the beginning of the current line.
@@ -97,45 +109,45 @@ This function passes its command to `digit-argument' (usually a 0)
 if it is not the first event."
   :type exclusive
   (evil-beginning-of-line-or-digit-argument)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-first-non-blank ()
   "Move the cursor to the first non-blank character of the current line."
   :type exclusive
   (evil-first-non-blank)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-last-non-blank (count)
   "Move the cursor to the last non-blank character of the current line.
 If COUNT is given, move COUNT - 1 lines downward first."
   :type inclusive
   (evil-last-non-blank count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-first-non-blank-of-visual-line ()
   "Move the cursor to the first non blank character
 of the current screen line."
   :type exclusive
   (evil-first-non-blank-of-visual-line)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-next-line-first-non-blank (count)
   "Move the cursor COUNT lines down on the first non-blank character."
   :type line
   (evil-next-line-first-non-blank count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-next-line-1-first-non-blank (count)
   "Move the cursor COUNT-1 lines down on the first non-blank character."
   :type line
   (evil-next-line-1-first-non-blank count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-previous-line-first-non-blank (count)
   "Move the cursor COUNT lines up on the first non-blank character."
   :type line
   (evil-previous-line-first-non-blank count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-goto-line (count)
   "Go to the first non-blank character of line COUNT.
@@ -143,7 +155,7 @@ By default the last line."
   :jump t
   :type line
   (evil-goto-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-goto-first-line (count)
   "Go to the first non-blank character of line COUNT.
@@ -151,57 +163,57 @@ By default the first line."
   :jump t
   :type line
   (evil-goto-first-line count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-forward-word-begin (count &optional bigword)
   :type exclusive
   (evil-forward-word-begin count bigword)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-forward-word-end (count &optional bigword)
   "Move the cursor to the end of the COUNT-th next word.
 If BIGWORD is non-nil, move by WORDS."
   :type inclusive
   (evil-forward-word-end count bigword)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-backward-word-begin (count &optional bigword)
   "Move the cursor to the beginning of the COUNT-th previous word.
 If BIGWORD is non-nil, move by WORDS."
   :type exclusive
   (evil-backward-word-begin count bigword)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-backward-word-end (count &optional bigword)
   "Move the cursor to the end of the COUNT-th previous word.
 If BIGWORD is non-nil, move by WORDS."
   :type inclusive
   (evil-backward-word-end count bigword)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-forward-WORD-begin (count)
   "Move the cursor to the beginning of the COUNT-th next WORD."
   :type exclusive
   (evil-forward-WORD-begin count)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-forward-WORD-end (count)
   "Move the cursor to the end of the COUNT-th next WORD."
   :type inclusive
   (evil-forward-WORD-end count)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-backward-WORD-begin (count)
   "Move the cursor to the beginning of the COUNT-th previous WORD."
   :type exclusive
   (evil-backward-WORD-begin count)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-backward-WORD-end (count)
   "Move the cursor to the end of the COUNT-th previous WORD."
   :type inclusive
   (evil-backward-WORD-end count)
-  (emacspeak-speak-word))
+  (evilspeak-speak-word))
 
 ;; section movement
 
@@ -210,21 +222,21 @@ If BIGWORD is non-nil, move by WORDS."
   :jump t
   :type exclusive
   (evil-forward-section-begin count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-forward-section-end (count)
   "Move the cursor to the end of the COUNT-th next section."
   :jump t
   :type inclusive
   (evil-forward-section-end count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-backward-section-begin (count)
   "Move the cursor to the beginning of the COUNT-th previous section."
   :jump t
   :type exclusive
   (evil-backward-section-begin count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 
 (evil-define-motion evilspeak-backward-section-end (count)
@@ -232,383 +244,204 @@ If BIGWORD is non-nil, move by WORDS."
   :jump t
   :type inclusive
   (evil-backward-section-end count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-forward-sentence-begin (count)
   "Move to the next COUNT-th beginning of a sentence or end of a paragraph."
   :jump t
   :type exclusive
   (evil-forward-section-begin count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-backward-sentence-begin (count)
   "Move to the previous COUNT-th beginning of a sentence or paragraph."
   :jump t
   :type exclusive
   (evil-backward-sentence-begin count)
-  (emacspeak-speak-line))
+  (evilspeak-speak-line))
 
 (evil-define-motion evilspeak-forward-paragraph (count)
   "Move to the end of the COUNT-th next paragraph."
   :jump t
   :type exclusive
   (evil-forward-paragraph count)
-  (emacspeak-speak-paragraph))
+  (evilspeak-speak-paragraph))
 
 (evil-define-motion evilspeak-backward-paragraph (count)
   "Move to the beginning of the COUNT-th previous paragraph."
   :jump t
   :type exclusive
   (evil-backward-paragraph count)
-  (emacspeak-speak-paragraph))
+  (evilspeak-speak-paragraph))
 
-;; (evil-define-motion evilspeak-jump-item (count)
-;;   "Find the next item in this line after or under the cursor
-;; and jump to the corresponding one."
-;;   :jump t
-;;   :type inclusive
-;;   (cond
-;;    ;; COUNT% jumps to a line COUNT percentage down the file
-;;    (count
-;;     (goto-char
-;;      (evil-normalize-position
-;;       (let ((size (- (point-max) (point-min))))
-;;         (+ (point-min)
-;;            (if (> size 80000)
-;;                (* count (/ size 100))
-;;              (/ (* count size) 100))))))
-;;     (back-to-indentation)
-;;     (setq evil-this-type 'line))
-;;    ((and (evil-looking-at-start-comment t)
-;;          (let ((pnt (point)))
-;;            (forward-comment 1)
-;;            (or (not (bolp))
-;;                (prog1 nil (goto-char pnt)))))
-;;     (backward-char))
-;;    ((and (not (eolp)) (evil-looking-at-end-comment t))
-;;     (forward-comment -1))
-;;    ((and
-;;      (memq major-mode '(c-mode c++-mode))
-;;      (require 'hideif nil t)
-;;      (with-no-warnings
-;;        (let* ((hif-else-regexp (concat hif-cpp-prefix "\\(?:else\\|elif[ \t]+\\)"))
-;;               (hif-ifx-else-endif-regexp
-;;                (concat hif-ifx-regexp "\\|" hif-else-regexp "\\|" hif-endif-regexp)))
-;;          (cond
-;;           ((save-excursion (beginning-of-line) (or (hif-looking-at-ifX) (hif-looking-at-else)))
-;;            (hif-find-next-relevant)
-;;            (while (hif-looking-at-ifX)
-;;              (hif-ifdef-to-endif)
-;;              (hif-find-next-relevant))
-;;            t)
-;;           ((save-excursion (beginning-of-line) (hif-looking-at-endif))
-;;            (hif-endif-to-ifdef)
-;;            t))))))
-;;    (t
-;;     (let* ((open (point-max))
-;;            (close (point-max))
-;;            (open-pair (condition-case nil
-;;                           (save-excursion
-;;                             ;; consider the character right before eol given that
-;;                             ;; point may be placed there, e.g. in visual state
-;;                             (when (and (eolp) (not (bolp)))
-;;                               (backward-char))
-;;                             (setq open (1- (scan-lists (point) 1 -1)))
-;;                             (when (< open (line-end-position))
-;;                               (goto-char open)
-;;                               (forward-list)
-;;                               (1- (point))))
-;;                         (error nil)))
-;;            (close-pair (condition-case nil
-;;                            (save-excursion
-;;                              ;; consider the character right before eol given that
-;;                              ;; point may be placed there, e.g. in visual state
-;;                              (when (and (eolp) (not (bolp)))
-;;                                (backward-char))
-;;                              (setq close (1- (scan-lists (point) 1 1)))
-;;                              (when (< close (line-end-position))
-;;                                (goto-char (1+ close))
-;;                                (backward-list)
-;;                                (point)))
-;;                          (error nil))))
-;;       (cond
-;;        ((not (or open-pair close-pair))
-;;         ;; nothing found, check if we are inside a string
-;;         (let ((pnt (point))
-;;               (state (syntax-ppss (point)))
-;;               (bnd (bounds-of-thing-at-point 'evil-string)))
-;;           (if (not (and bnd (< (point) (cdr bnd))))
-;;               ;; no, then we really failed
-;;               (user-error "No matching item found on the current line")
-;;             ;; yes, go to the end of the string and try again
-;;             (let ((endstr (cdr bnd)))
-;;               (when (or (save-excursion
-;;                           (goto-char endstr)
-;;                           (let ((b (bounds-of-thing-at-point 'evil-string)))
-;;                             (and b (< (point) (cdr b))))) ; not at end of string
-;;                         (condition-case nil
-;;                             (progn
-;;                               (goto-char endstr)
-;;                               (evil-jump-item)
-;;                               nil)
-;;                           (error t)))
-;;                 ;; failed again, go back to original point
-;;                 (goto-char pnt)
-;;                 (user-error "No matching item found on the current line"))))))
-;;        ((< open close) (goto-char open-pair))
-;;        (t (goto-char close-pair)))))))
+(evil-define-motion evilspeak-jump-item (count)
+  "Find the next item in this line after or under the cursor
+and jump to the corresponding one."
+  :jump t
+  :type inclusive
+  (evil-jump-item count)
+  (evilspeak-speak-word))
 
-;; (evil-define-motion evilspeak-previous-open-paren (count)
-;;   "Go to [count] previous unmatched '('."
-;;   :type exclusive
-;;   (evil-up-paren ?( ?) (- (or count 1))))
+(evil-define-motion evilspeak-previous-open-paren (count)
+  "Go to [count] previous unmatched '('."
+  :type exclusive
+  (evil-previous-open-paren count)
+  (evilspeak-speak-char))
 
-;; (evil-define-motion evilspeak-next-close-paren (count)
-;;   "Go to [count] next unmatched ')'."
-;;   :type exclusive
-;;   (forward-char)
-;;   (evil-up-paren ?( ?) (or count 1))
-;;   (backward-char))
+(evil-define-motion evilspeak-next-close-paren (count)
+  "Go to [count] next unmatched ')'."
+  :type exclusive
+  (evil-next-close-paren count)
+  (evilspeak-speak-char))
 
-;; (evil-define-motion evilspeak-previous-open-brace (count)
-;;   "Go to [count] previous unmatched '{'."
-;;   :type exclusive
-;;   (evil-up-paren ?{ ?} (- (or count 1))))
+(evil-define-motion evilspeak-previous-open-brace (count)
+  "Go to [count] previous unmatched '{'."
+  :type exclusive
+  (evil-previous-open-brace count)
+  (evilspeak-speak-char))
 
-;; (evil-define-motion evilspeak-next-close-brace (count)
-;;   "Go to [count] next unmatched '}'."
-;;   :type exclusive
-;;   (forward-char)
-;;   (evil-up-paren ?{ ?} (or count 1))
-;;   (backward-char))
+(evil-define-motion evilspeak-next-close-brace (count)
+  "Go to [count] next unmatched '}'."
+  :type exclusive
+  (evil-next-close-brace count)
+  (evilspeak-speak-char))
 
-;; (evil-define-motion evilspeak-find-char (count char)
-;;   "Move to the next COUNT'th occurrence of CHAR."
-;;   :type inclusive
-;;   (interactive "<c><C>")
-;;   (setq count (or count 1))
-;;   (let ((fwd (> count 0)))
-;;     (setq evil-last-find (list #'evil-find-char char fwd))
-;;     (when fwd (forward-char))
-;;     (let ((case-fold-search nil))
-;;       (unless (prog1
-;;                   (search-forward (char-to-string char)
-;;                                   (unless evil-cross-lines
-;;                                     (if fwd
-;;                                         (line-end-position)
-;;                                       (line-beginning-position)))
-;;                                   t count)
-;;                 (when fwd (backward-char)))
-;;         (user-error "Can't find %c" char)))))
 
-;; (evil-define-motion evilspeak-find-char-backward (count char)
-;;   "Move to the previous COUNT'th occurrence of CHAR."
-;;   :type exclusive
-;;   (interactive "<c><C>")
-;;   (evil-find-char (- (or count 1)) char))
+(evil-define-motion evilspeak-find-char (count char)
+  "Move to the next COUNT'th occurrence of CHAR."
+  :type inclusive
+  (evil-find-char count char)
+  (evilspeak-speak-word))
 
-;; (evil-define-motion evilspeak-find-char-to (count char)
-;;   "Move before the next COUNT'th occurrence of CHAR."
-;;   :type inclusive
-;;   (interactive "<c><C>")
-;;   (unwind-protect
-;;       (progn
-;;         (evil-find-char count char)
-;;         (if (> (or count 1) 0)
-;;             (backward-char)
-;;           (forward-char)))
-;;     (setcar evil-last-find #'evil-find-char-to)))
 
-;; (evil-define-motion evilspeak-find-char-to-backward (count char)
-;;   "Move before the previous COUNT'th occurrence of CHAR."
-;;   :type exclusive
-;;   (interactive "<c><C>")
-;;   (evil-find-char-to (- (or count 1)) char))
+(evil-define-motion evilspeak-find-char-backward (count char)
+  "Move to the previous COUNT'th occurrence of CHAR."
+  :type exclusive
+  (evil-find-char-backward count char)
+  (evilspeak-speak-word))
 
-;; (evil-define-motion evilspeak-repeat-find-char (count)
-;;   "Repeat the last find COUNT times."
-;;   :type inclusive
-;;   (setq count (or count 1))
-;;   (if evil-last-find
-;;       (let ((cmd (car evil-last-find))
-;;             (char (nth 1 evil-last-find))
-;;             (fwd (nth 2 evil-last-find))
-;;             evil-last-find)
-;;         ;; ensure count is non-negative
-;;         (when (< count 0)
-;;           (setq count (- count)
-;;                 fwd (not fwd)))
-;;         ;; skip next character when repeating t or T
-;;         (and (eq cmd #'evil-find-char-to)
-;;              evil-repeat-find-to-skip-next
-;;              (= count 1)
-;;              (or (and fwd (= (char-after (1+ (point))) char))
-;;                  (and (not fwd) (= (char-before) char)))
-;;              (setq count (1+ count)))
-;;         (funcall cmd (if fwd count (- count)) char)
-;;         (unless (nth 2 evil-last-find)
-;;           (setq evil-this-type 'exclusive)))
-;;     (user-error "No previous search")))
+(evil-define-motion evilspeak-find-char-to (count char)
+  "Move before the next COUNT'th occurrence of CHAR."
+  :type inclusive
+  (evil-find-char-to count char)
+  (evilspeak-speak-word))
 
-;; (evil-define-motion evilspeak-repeat-find-char-reverse (count)
-;;   "Repeat the last find COUNT times in the opposite direction."
-;;   :type inclusive
-;;   (evil-repeat-find-char (- (or count 1))))
+(evil-define-motion evilspeak-find-char-to-backward (count char)
+  "Move before the previous COUNT'th occurrence of CHAR."
+  :type exclusive
+  (evil-find-char-to-backward count char)
+  (evilspeak-speak-word))
 
-;; ;; ceci n'est pas une pipe
-;; (evil-define-motion evilspeak-goto-column (count)
-;;   "Go to column COUNT on the current line.
-;; Columns are counted from zero."
-;;   :type exclusive
-;;   (move-to-column (or count 0)))
+(evil-define-motion evilspeak-repeat-find-char (count)
+  "Repeat the last find COUNT times."
+  :type inclusive
+  (evil-repeat-find-char count)
+  (evilspeak-speak-word))
 
-;; (evil-define-command evil-goto-mark (char &optional noerror)
-;;   "Go to the marker specified by CHAR."
-;;   :keep-visual t
-;;   :repeat nil
-;;   :type exclusive
-;;   (interactive (list (read-char)))
-;;   (let ((marker (evil-get-marker char)))
-;;     (cond
-;;      ((markerp marker)
-;;       (switch-to-buffer (marker-buffer marker))
-;;       (goto-char (marker-position marker)))
-;;      ((numberp marker)
-;;       (goto-char marker))
-;;      ((consp marker)
-;;       (when (or (find-buffer-visiting (car marker))
-;;                 (and (y-or-n-p (format "Visit file %s again? "
-;;                                        (car marker)))
-;;                      (find-file (car marker))))
-;;         (goto-char (cdr marker))))
-;;      ((not noerror)
-;;       (user-error "Marker `%c' is not set%s" char
-;;                   (if (evil-global-marker-p char) ""
-;;                     " in this buffer"))))))
+(evil-define-motion evilspeak-repeat-find-char-reverse (count)
+  "Repeat the last find COUNT times in the opposite direction."
+  :type inclusive
+  (evil-repeat-find-char-reverse count)
+  (evilspeak-speak-word))
 
-;; (evil-define-command evil-goto-mark-line (char &optional noerror)
-;;   "Go to the line of the marker specified by CHAR."
-;;   :keep-visual t
-;;   :repeat nil
-;;   :type line
-;;   (interactive (list (read-char)))
-;;   (evil-goto-mark char noerror)
-;;   (evil-first-non-blank))
+(evil-define-motion evilspeak-goto-column (count)
+  "Go to column COUNT on the current line.
+Columns are counted from zero."
+  :type exclusive
+  (evil-goto-column)
+  (evilspeak-speak-line t))
 
-;; (evil-define-motion evilspeak-jump-backward (count)
-;;   "Go to older position in jump list.
-;; To go the other way, press \
-;; \\<evil-motion-state-map>\\[evil-jump-forward]."
-;;   (evil--jump-backward count))
+(evil-define-command evilspeak-goto-mark (char &optional noerror)
+  "Go to the marker specified by CHAR."
+  :keep-visual t
+  :repeat nil
+  :type exclusive
+  (evil-goto-mark char noerror)
+  (evilspeak-speak-line t))
 
-;; (evil-define-motion evilspeak-jump-forward (count)
-;;   "Go to newer position in jump list.
-;; To go the other way, press \
-;; \\<evil-motion-state-map>\\[evil-jump-backward]."
-;;   (evil--jump-forward count))
+(evil-define-command evil-goto-mark-line (char &optional noerror)
+  "Go to the line of the marker specified by CHAR."
+  :keep-visual t
+  :repeat nil
+  :type line
+  (evil-goto-mark-line char noerror)
+  (evilspeak-speak-line t))
 
-;; (evil-define-motion evilspeak-jump-backward-swap (count)
-;;   "Go to the previous position in jump list.
-;; The current position is placed in the jump list."
-;;   (let ((pnt (point)))
-;;     (evil--jump-backward 1)
-;;     (evil-set-jump pnt)))
+(evil-define-motion evilspeak-jump-backward (count)
+  "Go to older position in jump list."
+  (evil-jump-backward count)
+  (evilspeak-speak-line))
 
-;; (evil-define-motion evilspeak-jump-to-tag (arg)
-;;   "Jump to tag under point.
-;; If called with a prefix argument, provide a prompt
-;; for specifying the tag."
-;;   :jump t
-;;   (interactive "P")
-;;   (if arg (call-interactively #'find-tag)
-;;     (let ((tag (funcall (or find-tag-default-function
-;;                             (get major-mode 'find-tag-default-function)
-;;                             #'find-tag-default))))
-;;       (unless tag (user-error "No tag candidate found around point"))
-;;       (find-tag tag))))
+(evil-define-motion evilspeak-jump-forward (count)
+  "Go to newer position in jump list.
+To go the other way, press \
+\\<evil-motion-state-map>\\[evil-jump-backward]."
+  (evil-jump-forward count)
+  (evilspeak-speak-long-jump))
 
-;; (evil-define-motion evilspeak-lookup ()
-;;   "Look up the keyword at point.
-;; Calls `evil-lookup-func'."
-;;   (funcall evil-lookup-func))
+(evil-define-motion evilspeak-jump-backward-swap (count)
+  "Go to the previous position in jump list.
+The current position is placed in the jump list."
+  (evil-jump-backward-swap count)
+  (evilspeak-speak-long-jump))
 
-;; (defun evil-ret-gen (count indent?)
-;;   (let* ((field  (get-char-property (point) 'field))
-;;          (button (get-char-property (point) 'button))
-;;          (doc    (get-char-property (point) 'widget-doc))
-;;          (widget (or field button doc)))
-;;     (cond
-;;      ((and widget
-;;            (fboundp 'widget-type)
-;;            (fboundp 'widget-button-press)
-;;            (or (and (symbolp widget)
-;;                     (get widget 'widget-type))
-;;                (and (consp widget)
-;;                     (get (widget-type widget) 'widget-type))))
-;;       (when (evil-operator-state-p)
-;;         (setq evil-inhibit-operator t))
-;;       (when (fboundp 'widget-button-press)
-;;         (widget-button-press (point))))
-;;      ((and (fboundp 'button-at)
-;;            (fboundp 'push-button)
-;;            (button-at (point)))
-;;       (when (evil-operator-state-p)
-;;         (setq evil-inhibit-operator t))
-;;       (push-button))
-;;      ((or (evil-emacs-state-p)
-;;           (and (evil-insert-state-p)
-;;                (not buffer-read-only)))
-;;       (if (not indent?)
-;;           (newline count)
-;;         (delete-horizontal-space t)
-;;         (newline count)
-;;         (indent-according-to-mode)))
-;;      (t
-;;       (evil-next-line-first-non-blank count)))))
+(evil-define-motion evilspeak-jump-to-tag (arg)
+  "Jump to tag under point.
+If called with a prefix argument, provide a prompt
+for specifying the tag."
+  :jump t
+  (evil-jump-to-tag arg)
+  (evilspeak-speak-long-jump))
 
-;; (evil-define-motion evilspeak-ret (count)
-;;   "Move the cursor COUNT lines down.
-;; If point is on a widget or a button, click on it.
-;; In Insert state, insert a newline."
-;;   :type line
-;;   (evil-ret-gen count nil))
+(evil-define-motion evilspeak-lookup ()
+  "Look up the keyword at point.
+Calls `evil-lookup-func'."
+  (evil-lookup)
+  (evilspeak-speak-long-jump))
 
-;; (evil-define-motion evilspeak-ret-and-indent (count)
-;;   "Move the cursor COUNT lines down.
-;; If point is on a widget or a button, click on it.
-;; In Insert state, insert a newline and indent."
-;;   :type line
-;;   (evil-ret-gen count t))
 
-;; (evil-define-motion evilspeak-window-top (count)
-;;   "Move the cursor to line COUNT from the top of the window
-;; on the first non-blank character."
-;;   :jump t
-;;   :type line
-;;   (move-to-window-line (max (or count 0)
-;;                             (if (= (point-min) (window-start))
-;;                                 0
-;;                               scroll-margin)))
-;;   (back-to-indentation))
+(evil-define-motion evilspeak-ret (count)
+  "Move the cursor COUNT lines down.
+If point is on a widget or a button, click on it.
+In Insert state, insert a newline."
+  :type line
+  (evil-ret count)
+  (evilspeak-speak-line))
 
-;; (evil-define-motion evilspeak-window-middle ()
-;;   "Move the cursor to the middle line in the window
-;; on the first non-blank character."
-;;   :jump t
-;;   :type line
-;;   (move-to-window-line
-;;    (/ (1+ (save-excursion (move-to-window-line -1))) 2))
-;;   (back-to-indentation))
+(evil-define-motion evilspeak-ret-and-indent (count)
+  "Move the cursor COUNT lines down.
+If point is on a widget or a button, click on it.
+In Insert state, insert a newline and indent."
+  :type line
+  (evil-ret-and-indent count)
+  (evilspeak-speak-line))
 
-;; (evil-define-motion evilspeak-window-bottom (count)
-;;   "Move the cursor to line COUNT from the bottom of the window
-;; on the first non-blank character."
-;;   :jump t
-;;   :type line
-;;   (move-to-window-line (- (max (or count 1) (1+ scroll-margin))))
-;;   (back-to-indentation))
+(evil-define-motion evilspeak-window-top (count)
+  "Move the cursor to line COUNT from the top of the window
+on the first non-blank character."
+  :jump t
+  :type line
+  (evil-window-top count)
+  (evilspeak-speak-line))
 
-;; ;; scrolling
+(evil-define-motion evilspeak-window-middle ()
+  "Move the cursor to the middle line in the window
+on the first non-blank character."
+  :jump t
+  :type line
+  (evil-window-middle)
+  (evilspeak-speak-line))
+
+(evil-define-motion evilspeak-window-bottom (count)
+  "Move the cursor to line COUNT from the bottom of the window
+on the first non-blank character."
+  :jump t
+  :type line
+  (evil-window-bottom count)
+  (evilspeak-speak-line))
+
+;; ;; scrolling skipped 
+
 ;; (evil-define-command evil-scroll-line-up (count)
 ;;   "Scrolls the window COUNT lines upwards.
 ;; If COUNT is not specified the function uses
