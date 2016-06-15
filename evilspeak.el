@@ -6,6 +6,7 @@
 ;; ;; Furthermore, the command must have the command properties
 ;; ;; :keep-visual t and :repeat motion; these are automatically
 ;; ;; set by the `evil-define-motion' macro.
+(require 'evil)
 
 (evil-define-motion evilspeak-next-line (count)
   "Move the cursor COUNT lines down."
@@ -90,253 +91,178 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
   (evil-middle-of-visual-line)
   (emacspeak-speak-line))
 
-;; (evil-define-motion evil-beginning-of-line-or-digit-argument ()
-;;   "Move the cursor to the beginning of the current line.
-;; This function passes its command to `digit-argument' (usually a 0)
-;; if it is not the first event."
-;;   :type exclusive
-;;   (cond
-;;    (current-prefix-arg
-;;     (setq this-command #'digit-argument)
-;;     (call-interactively #'digit-argument))
-;;    (t
-;;     (setq this-command #'evil-beginning-of-line)
-;;     (call-interactively #'evil-beginning-of-line))))
+(evil-define-motion evilspeak-beginning-of-line-or-digit-argument ()
+  "Move the cursor to the beginning of the current line.
+This function passes its command to `digit-argument' (usually a 0)
+if it is not the first event."
+  :type exclusive
+  (evil-beginning-of-line-or-digit-argument)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-first-non-blank ()
-;;   "Move the cursor to the first non-blank character of the current line."
-;;   :type exclusive
-;;   (evil-narrow-to-line (back-to-indentation)))
+(evil-define-motion evilspeak-first-non-blank ()
+  "Move the cursor to the first non-blank character of the current line."
+  :type exclusive
+  (evil-first-non-blank)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-last-non-blank (count)
-;;   "Move the cursor to the last non-blank character of the current line.
-;; If COUNT is given, move COUNT - 1 lines downward first."
-;;   :type inclusive
-;;   (goto-char
-;;    (save-excursion
-;;      (evil-move-beginning-of-line count)
-;;      (if (re-search-forward "[ \t]*$")
-;;          (max (line-beginning-position)
-;;               (1- (match-beginning 0)))
-;;        (line-beginning-position)))))
+(evil-define-motion evilspeak-last-non-blank (count)
+  "Move the cursor to the last non-blank character of the current line.
+If COUNT is given, move COUNT - 1 lines downward first."
+  :type inclusive
+  (evil-last-non-blank count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-first-non-blank-of-visual-line ()
-;;   "Move the cursor to the first non blank character
-;; of the current screen line."
-;;   :type exclusive
-;;   (evil-beginning-of-visual-line)
-;;   (skip-chars-forward " \t\r"))
+(evil-define-motion evilspeak-first-non-blank-of-visual-line ()
+  "Move the cursor to the first non blank character
+of the current screen line."
+  :type exclusive
+  (evil-first-non-blank-of-visual-line)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-next-line-first-non-blank (count)
-;;   "Move the cursor COUNT lines down on the first non-blank character."
-;;   :type line
-;;   (evil-next-line (or count 1))
-;;   (evil-first-non-blank))
+(evil-define-motion evilspeak-next-line-first-non-blank (count)
+  "Move the cursor COUNT lines down on the first non-blank character."
+  :type line
+  (evil-next-line-first-non-blank count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-next-line-1-first-non-blank (count)
-;;   "Move the cursor COUNT-1 lines down on the first non-blank character."
-;;   :type line
-;;   (evil-next-line (1- (or count 1)))
-;;   (evil-first-non-blank))
+(evil-define-motion evilspeak-next-line-1-first-non-blank (count)
+  "Move the cursor COUNT-1 lines down on the first non-blank character."
+  :type line
+  (evil-next-line-1-first-non-blank count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-previous-line-first-non-blank (count)
-;;   "Move the cursor COUNT lines up on the first non-blank character."
-;;   :type line
-;;   (evil-previous-line (or count 1))
-;;   (evil-first-non-blank))
+(evil-define-motion evilspeak-previous-line-first-non-blank (count)
+  "Move the cursor COUNT lines up on the first non-blank character."
+  :type line
+  (evil-previous-line-first-non-blank count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-goto-line (count)
-;;   "Go to the first non-blank character of line COUNT.
-;; By default the last line."
-;;   :jump t
-;;   :type line
-;;   (if (null count)
-;;       (with-no-warnings (end-of-buffer))
-;;     (goto-char (point-min))
-;;     (forward-line (1- count)))
-;;   (evil-first-non-blank))
+(evil-define-motion evilspeak-goto-line (count)
+  "Go to the first non-blank character of line COUNT.
+By default the last line."
+  :jump t
+  :type line
+  (evil-goto-line count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-goto-first-line (count)
-;;   "Go to the first non-blank character of line COUNT.
-;; By default the first line."
-;;   :jump t
-;;   :type line
-;;   (evil-goto-line (or count 1)))
+(evil-define-motion evilspeak-goto-first-line (count)
+  "Go to the first non-blank character of line COUNT.
+By default the first line."
+  :jump t
+  :type line
+  (evil-goto-first-line count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-forward-word-begin (count &optional bigword)
-;;   "Move the cursor to the beginning of the COUNT-th next word.
-;; If BIGWORD is non-nil, move by WORDS.
+(evil-define-motion evilspeak-forward-word-begin (count &optional bigword)
+  :type exclusive
+  (evil-forward-word-begin count bigword)
+  (emacspeak-speak-word))
 
-;; If this command is called in operator-pending state it behaves
-;; differently. If point reaches the beginning of a word on a new
-;; line point is moved back to the end of the previous line.
+(evil-define-motion evilspeak-forward-word-end (count &optional bigword)
+  "Move the cursor to the end of the COUNT-th next word.
+If BIGWORD is non-nil, move by WORDS."
+  :type inclusive
+  (evil-forward-word-end count bigword)
+  (emacspeak-speak-word))
 
-;; If called after a change operator, i.e. cw or cW,
-;; `evil-want-change-word-to-end' is non-nil and point is on a word,
-;; then both behave like ce or cE.
+(evil-define-motion evilspeak-backward-word-begin (count &optional bigword)
+  "Move the cursor to the beginning of the COUNT-th previous word.
+If BIGWORD is non-nil, move by WORDS."
+  :type exclusive
+  (evil-backward-word-begin count bigword)
+  (emacspeak-speak-word))
 
-;; If point is at the end of the buffer and cannot be moved signal
-;; 'end-of-buffer is raised.
-;; "
-;;   :type exclusive
-;;   (let ((thing (if bigword 'evil-WORD 'evil-word))
-;;         (orig (point))
-;;         (count (or count 1)))
-;;     (evil-signal-at-bob-or-eob count)
-;;     (cond
-;;      ;; default motion, beginning of next word
-;;      ((not (evil-operator-state-p))
-;;       (evil-forward-beginning thing count))
-;;      ;; the evil-change operator, maybe behave like ce or cE
-;;      ((and evil-want-change-word-to-end
-;;            (eq evil-this-operator #'evil-change)
-;;            (< orig (or (cdr-safe (bounds-of-thing-at-point thing)) orig)))
-;;       ;; forward-thing moves point to the correct position because
-;;       ;; this is an exclusive motion
-;;       (forward-thing thing count))
-;;      ;; operator state
-;;      (t
-;;       (prog1 (evil-forward-beginning thing count)
-;;         ;; if we reached the beginning of a word on a new line in
-;;         ;; Operator-Pending state, go back to the end of the previous
-;;         ;; line
-;;         (when (and (> (line-beginning-position) orig)
-;;                    (looking-back "^[[:space:]]*" (line-beginning-position)))
-;;           ;; move cursor back as long as the line contains only
-;;           ;; whitespaces and is non-empty
-;;           (evil-move-end-of-line 0)
-;;           ;; skip non-empty lines containing only spaces
-;;           (while (and (looking-back "^[[:space:]]+$" (line-beginning-position))
-;;                       (not (<= (line-beginning-position) orig)))
-;;             (evil-move-end-of-line 0))
-;;           ;; but if the previous line is empty, delete this line
-;;           (when (bolp) (forward-char))))))))
+(evil-define-motion evilspeak-backward-word-end (count &optional bigword)
+  "Move the cursor to the end of the COUNT-th previous word.
+If BIGWORD is non-nil, move by WORDS."
+  :type inclusive
+  (evil-backward-word-end count bigword)
+  (emacspeak-speak-word))
 
-;; (evil-define-motion evil-forward-word-end (count &optional bigword)
-;;   "Move the cursor to the end of the COUNT-th next word.
-;; If BIGWORD is non-nil, move by WORDS."
-;;   :type inclusive
-;;   (let ((thing (if bigword 'evil-WORD 'evil-word))
-;;         (count (or count 1)))
-;;     (evil-signal-at-bob-or-eob count)
-;;     ;; Evil special behaviour: e or E on a one-character word in
-;;     ;; operator state does not move point
-;;     (unless (and (evil-operator-state-p)
-;;                  (= 1 count)
-;;                  (let ((bnd (bounds-of-thing-at-point thing)))
-;;                    (and bnd
-;;                         (= (car bnd) (point))
-;;                         (= (cdr bnd) (1+ (point)))))
-;;                  (looking-at "[[:word:]]"))
-;;       (evil-forward-end thing count))))
+(evil-define-motion evilspeak-forward-WORD-begin (count)
+  "Move the cursor to the beginning of the COUNT-th next WORD."
+  :type exclusive
+  (evil-forward-WORD-begin count)
+  (emacspeak-speak-word))
 
-;; (evil-define-motion evil-backward-word-begin (count &optional bigword)
-;;   "Move the cursor to the beginning of the COUNT-th previous word.
-;; If BIGWORD is non-nil, move by WORDS."
-;;   :type exclusive
-;;   (let ((thing (if bigword 'evil-WORD 'evil-word)))
-;;     (evil-signal-at-bob-or-eob (- (or count 1)))
-;;     (evil-backward-beginning thing count)))
+(evil-define-motion evilspeak-forward-WORD-end (count)
+  "Move the cursor to the end of the COUNT-th next WORD."
+  :type inclusive
+  (evil-forward-WORD-end count)
+  (emacspeak-speak-word))
 
-;; (evil-define-motion evil-backward-word-end (count &optional bigword)
-;;   "Move the cursor to the end of the COUNT-th previous word.
-;; If BIGWORD is non-nil, move by WORDS."
-;;   :type inclusive
-;;   (let ((thing (if bigword 'evil-WORD 'evil-word)))
-;;     (evil-signal-at-bob-or-eob (- (or count 1)))
-;;     (evil-backward-end thing count)))
+(evil-define-motion evilspeak-backward-WORD-begin (count)
+  "Move the cursor to the beginning of the COUNT-th previous WORD."
+  :type exclusive
+  (evil-backward-WORD-begin count)
+  (emacspeak-speak-word))
 
-;; (evil-define-motion evil-forward-WORD-begin (count)
-;;   "Move the cursor to the beginning of the COUNT-th next WORD."
-;;   :type exclusive
-;;   (evil-forward-word-begin count t))
+(evil-define-motion evilspeak-backward-WORD-end (count)
+  "Move the cursor to the end of the COUNT-th previous WORD."
+  :type inclusive
+  (evil-backward-WORD-end count)
+  (emacspeak-speak-word))
 
-;; (evil-define-motion evil-forward-WORD-end (count)
-;;   "Move the cursor to the end of the COUNT-th next WORD."
-;;   :type inclusive
-;;   (evil-forward-word-end count t))
+;; section movement
 
-;; (evil-define-motion evil-backward-WORD-begin (count)
-;;   "Move the cursor to the beginning of the COUNT-th previous WORD."
-;;   :type exclusive
-;;   (evil-backward-word-begin count t))
+(evil-define-motion evilspeak-forward-section-begin (count)
+  "Move the cursor to the beginning of the COUNT-th next section."
+  :jump t
+  :type exclusive
+  (evil-forward-section-begin count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-backward-WORD-end (count)
-;;   "Move the cursor to the end of the COUNT-th previous WORD."
-;;   :type inclusive
-;;   (evil-backward-word-end count t))
+(evil-define-motion evilspeak-forward-section-end (count)
+  "Move the cursor to the end of the COUNT-th next section."
+  :jump t
+  :type inclusive
+  (evil-forward-section-end count)
+  (emacspeak-speak-line))
 
-;; ;; section movement
-;; (evil-define-motion evil-forward-section-begin (count)
-;;   "Move the cursor to the beginning of the COUNT-th next section."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob count)
-;;   (evil-forward-beginning 'evil-defun count))
+(evil-define-motion evilspeak-backward-section-begin (count)
+  "Move the cursor to the beginning of the COUNT-th previous section."
+  :jump t
+  :type exclusive
+  (evil-backward-section-begin count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-forward-section-end (count)
-;;   "Move the cursor to the end of the COUNT-th next section."
-;;   :jump t
-;;   :type inclusive
-;;   (evil-signal-at-bob-or-eob count)
-;;   (evil-forward-end 'evil-defun count)
-;;   (unless (eobp) (forward-line)))
 
-;; (evil-define-motion evil-backward-section-begin (count)
-;;   "Move the cursor to the beginning of the COUNT-th previous section."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob (- (or count 1)))
-;;   (evil-backward-beginning 'evil-defun count))
+(evil-define-motion evilspeak-backward-section-end (count)
+  "Move the cursor to the end of the COUNT-th previous section."
+  :jump t
+  :type inclusive
+  (evil-backward-section-end count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-backward-section-end (count)
-;;   "Move the cursor to the end of the COUNT-th previous section."
-;;   :jump t
-;;   :type inclusive
-;;   (evil-signal-at-bob-or-eob (- (or count 1)))
-;;   (end-of-line -1)
-;;   (evil-backward-end 'evil-defun count)
-;;   (unless (eobp) (forward-line)))
+(evil-define-motion evilspeak-forward-sentence-begin (count)
+  "Move to the next COUNT-th beginning of a sentence or end of a paragraph."
+  :jump t
+  :type exclusive
+  (evil-forward-section-begin count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-forward-sentence-begin (count)
-;;   "Move to the next COUNT-th beginning of a sentence or end of a paragraph."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob count)
-;;   (evil-forward-nearest count
-;;                         #'(lambda (cnt)
-;;                             (evil-forward-beginning 'evil-sentence))
-;;                         #'evil-forward-paragraph))
+(evil-define-motion evilspeak-backward-sentence-begin (count)
+  "Move to the previous COUNT-th beginning of a sentence or paragraph."
+  :jump t
+  :type exclusive
+  (evil-backward-sentence-begin count)
+  (emacspeak-speak-line))
 
-;; (evil-define-motion evil-backward-sentence-begin (count)
-;;   "Move to the previous COUNT-th beginning of a sentence or paragraph."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob (- (or count 1)))
-;;   (evil-forward-nearest (- (or count 1))
-;;                         #'(lambda (cnt)
-;;                             (evil-backward-beginning 'evil-sentence))
-;;                         #'(lambda (cnt)
-;;                             (evil-backward-paragraph))))
+(evil-define-motion evilspeak-forward-paragraph (count)
+  "Move to the end of the COUNT-th next paragraph."
+  :jump t
+  :type exclusive
+  (evil-forward-paragraph count)
+  (emacspeak-speak-paragraph))
 
-;; (evil-define-motion evil-forward-paragraph (count)
-;;   "Move to the end of the COUNT-th next paragraph."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob count)
-;;   (evil-forward-end 'evil-paragraph count)
-;;   (unless (eobp) (forward-line)))
+(evil-define-motion evilspeak-backward-paragraph (count)
+  "Move to the beginning of the COUNT-th previous paragraph."
+  :jump t
+  :type exclusive
+  (evil-backward-paragraph count)
+  (emacspeak-speak-paragraph))
 
-;; (evil-define-motion evil-backward-paragraph (count)
-;;   "Move to the beginning of the COUNT-th previous paragraph."
-;;   :jump t
-;;   :type exclusive
-;;   (evil-signal-at-bob-or-eob (- (or count 1)))
-;;   (unless (eobp) (forward-line))
-;;   (evil-backward-beginning 'evil-paragraph count)
-;;   (unless (bobp) (forward-line -1)))
-
-;; (evil-define-motion evil-jump-item (count)
+;; (evil-define-motion evilspeak-jump-item (count)
 ;;   "Find the next item in this line after or under the cursor
 ;; and jump to the corresponding one."
 ;;   :jump t
@@ -432,31 +358,31 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;        ((< open close) (goto-char open-pair))
 ;;        (t (goto-char close-pair)))))))
 
-;; (evil-define-motion evil-previous-open-paren (count)
+;; (evil-define-motion evilspeak-previous-open-paren (count)
 ;;   "Go to [count] previous unmatched '('."
 ;;   :type exclusive
 ;;   (evil-up-paren ?( ?) (- (or count 1))))
 
-;; (evil-define-motion evil-next-close-paren (count)
+;; (evil-define-motion evilspeak-next-close-paren (count)
 ;;   "Go to [count] next unmatched ')'."
 ;;   :type exclusive
 ;;   (forward-char)
 ;;   (evil-up-paren ?( ?) (or count 1))
 ;;   (backward-char))
 
-;; (evil-define-motion evil-previous-open-brace (count)
+;; (evil-define-motion evilspeak-previous-open-brace (count)
 ;;   "Go to [count] previous unmatched '{'."
 ;;   :type exclusive
 ;;   (evil-up-paren ?{ ?} (- (or count 1))))
 
-;; (evil-define-motion evil-next-close-brace (count)
+;; (evil-define-motion evilspeak-next-close-brace (count)
 ;;   "Go to [count] next unmatched '}'."
 ;;   :type exclusive
 ;;   (forward-char)
 ;;   (evil-up-paren ?{ ?} (or count 1))
 ;;   (backward-char))
 
-;; (evil-define-motion evil-find-char (count char)
+;; (evil-define-motion evilspeak-find-char (count char)
 ;;   "Move to the next COUNT'th occurrence of CHAR."
 ;;   :type inclusive
 ;;   (interactive "<c><C>")
@@ -475,13 +401,13 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                 (when fwd (backward-char)))
 ;;         (user-error "Can't find %c" char)))))
 
-;; (evil-define-motion evil-find-char-backward (count char)
+;; (evil-define-motion evilspeak-find-char-backward (count char)
 ;;   "Move to the previous COUNT'th occurrence of CHAR."
 ;;   :type exclusive
 ;;   (interactive "<c><C>")
 ;;   (evil-find-char (- (or count 1)) char))
 
-;; (evil-define-motion evil-find-char-to (count char)
+;; (evil-define-motion evilspeak-find-char-to (count char)
 ;;   "Move before the next COUNT'th occurrence of CHAR."
 ;;   :type inclusive
 ;;   (interactive "<c><C>")
@@ -493,13 +419,13 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;           (forward-char)))
 ;;     (setcar evil-last-find #'evil-find-char-to)))
 
-;; (evil-define-motion evil-find-char-to-backward (count char)
+;; (evil-define-motion evilspeak-find-char-to-backward (count char)
 ;;   "Move before the previous COUNT'th occurrence of CHAR."
 ;;   :type exclusive
 ;;   (interactive "<c><C>")
 ;;   (evil-find-char-to (- (or count 1)) char))
 
-;; (evil-define-motion evil-repeat-find-char (count)
+;; (evil-define-motion evilspeak-repeat-find-char (count)
 ;;   "Repeat the last find COUNT times."
 ;;   :type inclusive
 ;;   (setq count (or count 1))
@@ -524,13 +450,13 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;           (setq evil-this-type 'exclusive)))
 ;;     (user-error "No previous search")))
 
-;; (evil-define-motion evil-repeat-find-char-reverse (count)
+;; (evil-define-motion evilspeak-repeat-find-char-reverse (count)
 ;;   "Repeat the last find COUNT times in the opposite direction."
 ;;   :type inclusive
 ;;   (evil-repeat-find-char (- (or count 1))))
 
 ;; ;; ceci n'est pas une pipe
-;; (evil-define-motion evil-goto-column (count)
+;; (evil-define-motion evilspeak-goto-column (count)
 ;;   "Go to column COUNT on the current line.
 ;; Columns are counted from zero."
 ;;   :type exclusive
@@ -569,26 +495,26 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   (evil-goto-mark char noerror)
 ;;   (evil-first-non-blank))
 
-;; (evil-define-motion evil-jump-backward (count)
+;; (evil-define-motion evilspeak-jump-backward (count)
 ;;   "Go to older position in jump list.
 ;; To go the other way, press \
 ;; \\<evil-motion-state-map>\\[evil-jump-forward]."
 ;;   (evil--jump-backward count))
 
-;; (evil-define-motion evil-jump-forward (count)
+;; (evil-define-motion evilspeak-jump-forward (count)
 ;;   "Go to newer position in jump list.
 ;; To go the other way, press \
 ;; \\<evil-motion-state-map>\\[evil-jump-backward]."
 ;;   (evil--jump-forward count))
 
-;; (evil-define-motion evil-jump-backward-swap (count)
+;; (evil-define-motion evilspeak-jump-backward-swap (count)
 ;;   "Go to the previous position in jump list.
 ;; The current position is placed in the jump list."
 ;;   (let ((pnt (point)))
 ;;     (evil--jump-backward 1)
 ;;     (evil-set-jump pnt)))
 
-;; (evil-define-motion evil-jump-to-tag (arg)
+;; (evil-define-motion evilspeak-jump-to-tag (arg)
 ;;   "Jump to tag under point.
 ;; If called with a prefix argument, provide a prompt
 ;; for specifying the tag."
@@ -601,7 +527,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;       (unless tag (user-error "No tag candidate found around point"))
 ;;       (find-tag tag))))
 
-;; (evil-define-motion evil-lookup ()
+;; (evil-define-motion evilspeak-lookup ()
 ;;   "Look up the keyword at point.
 ;; Calls `evil-lookup-func'."
 ;;   (funcall evil-lookup-func))
@@ -640,21 +566,21 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;      (t
 ;;       (evil-next-line-first-non-blank count)))))
 
-;; (evil-define-motion evil-ret (count)
+;; (evil-define-motion evilspeak-ret (count)
 ;;   "Move the cursor COUNT lines down.
 ;; If point is on a widget or a button, click on it.
 ;; In Insert state, insert a newline."
 ;;   :type line
 ;;   (evil-ret-gen count nil))
 
-;; (evil-define-motion evil-ret-and-indent (count)
+;; (evil-define-motion evilspeak-ret-and-indent (count)
 ;;   "Move the cursor COUNT lines down.
 ;; If point is on a widget or a button, click on it.
 ;; In Insert state, insert a newline and indent."
 ;;   :type line
 ;;   (evil-ret-gen count t))
 
-;; (evil-define-motion evil-window-top (count)
+;; (evil-define-motion evilspeak-window-top (count)
 ;;   "Move the cursor to line COUNT from the top of the window
 ;; on the first non-blank character."
 ;;   :jump t
@@ -665,7 +591,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                               scroll-margin)))
 ;;   (back-to-indentation))
 
-;; (evil-define-motion evil-window-middle ()
+;; (evil-define-motion evilspeak-window-middle ()
 ;;   "Move the cursor to the middle line in the window
 ;; on the first non-blank character."
 ;;   :jump t
@@ -674,7 +600,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;    (/ (1+ (save-excursion (move-to-window-line -1))) 2))
 ;;   (back-to-indentation))
 
-;; (evil-define-motion evil-window-bottom (count)
+;; (evil-define-motion evilspeak-window-bottom (count)
 ;;   "Move the cursor to line COUNT from the bottom of the window
 ;; on the first non-blank character."
 ;;   :jump t
@@ -1881,7 +1807,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 
 ;; ;;; Visual commands
 
-;; (evil-define-motion evil-visual-restore ()
+;; (evil-define-motion evilspeak-visual-restore ()
 ;;   "Restore previous selection."
 ;;   (let* ((point (point))
 ;;          (mark (or (mark t) point))
@@ -1911,7 +1837,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;               point evil-visual-point)))
 ;;       (evil-visual-make-selection mark point type t))))
 
-;; (evil-define-motion evil-visual-exchange-corners ()
+;; (evil-define-motion evilspeak-visual-exchange-corners ()
 ;;   "Rearrange corners in Visual Block mode.
 
 ;;         M---+           +---M
@@ -2328,7 +2254,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                           (car-safe search-ring))))
 ;;    (t (evil-repeat-motion flag))))
 
-;; (evil-define-motion evil-search-forward ()
+;; (evil-define-motion evilspeak-search-forward ()
 ;;   (format "Search forward for user-entered text.
 ;; Searches for regular expression if `evil-regexp-search' is t.%s"
 ;;           (if (and (fboundp 'isearch-forward)
@@ -2341,7 +2267,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   :repeat evil-repeat-search
 ;;   (evil-search-incrementally t evil-regexp-search))
 
-;; (evil-define-motion evil-search-backward ()
+;; (evil-define-motion evilspeak-search-backward ()
 ;;   (format "Search backward for user-entered text.
 ;; Searches for regular expression if `evil-regexp-search' is t.%s"
 ;;           (if (and (fboundp 'isearch-forward)
@@ -2354,7 +2280,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   :repeat evil-repeat-search
 ;;   (evil-search-incrementally nil evil-regexp-search))
 
-;; (evil-define-motion evil-search-next (count)
+;; (evil-define-motion evilspeak-search-next (count)
 ;;   "Repeat the last search."
 ;;   :jump t
 ;;   :type exclusive
@@ -2364,7 +2290,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                    (car-safe search-ring))
 ;;                  isearch-forward evil-regexp-search)))
 
-;; (evil-define-motion evil-search-previous (count)
+;; (evil-define-motion evilspeak-search-previous (count)
 ;;   "Repeat the last search in the opposite direction."
 ;;   :jump t
 ;;   :type exclusive
@@ -2374,7 +2300,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                    (car-safe search-ring))
 ;;                  (not isearch-forward) evil-regexp-search)))
 
-;; (evil-define-motion evil-search-word-backward (count &optional symbol)
+;; (evil-define-motion evilspeak-search-word-backward (count &optional symbol)
 ;;   "Search backward for symbol under point."
 ;;   :jump t
 ;;   :type exclusive
@@ -2383,7 +2309,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   (dotimes (var (or count 1))
 ;;     (evil-search-word nil nil symbol)))
 
-;; (evil-define-motion evil-search-word-forward (count &optional symbol)
+;; (evil-define-motion evilspeak-search-word-forward (count &optional symbol)
 ;;   "Search forward for symbol under point."
 ;;   :jump t
 ;;   :type exclusive
@@ -2392,7 +2318,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   (dotimes (var (or count 1))
 ;;     (evil-search-word t nil symbol)))
 
-;; (evil-define-motion evil-search-unbounded-word-backward (count &optional symbol)
+;; (evil-define-motion evilspeak-search-unbounded-word-backward (count &optional symbol)
 ;;   "Search backward for symbol under point.
 ;; The search is unbounded, i.e., the pattern is not wrapped in
 ;; \\<...\\>."
@@ -2403,7 +2329,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   (dotimes (var (or count 1))
 ;;     (evil-search-word nil t symbol)))
 
-;; (evil-define-motion evil-search-unbounded-word-forward (count &optional symbol)
+;; (evil-define-motion evilspeak-search-unbounded-word-forward (count &optional symbol)
 ;;   "Search forward for symbol under point.
 ;; The search is unbounded, i.e., the pattern is not wrapped in
 ;; \\<...\\>."
@@ -2414,7 +2340,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   (dotimes (var (or count 1))
 ;;     (evil-search-word t t symbol)))
 
-;; (evil-define-motion evil-goto-definition ()
+;; (evil-define-motion evilspeak-goto-definition ()
 ;;   "Go to definition or first occurrence of symbol under point."
 ;;   :jump t
 ;;   :type exclusive
@@ -3035,13 +2961,13 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;   :suppress-operator t
 ;;   (evil-normal-state))
 
-;; (evil-define-motion evil-ex-search-next (count)
+;; (evil-define-motion evilspeak-ex-search-next (count)
 ;;   "Goes to the next occurrence."
 ;;   :jump t
 ;;   :type exclusive
 ;;   (evil-ex-search count))
 
-;; (evil-define-motion evil-ex-search-previous (count)
+;; (evil-define-motion evilspeak-ex-search-previous (count)
 ;;   "Goes the the previous occurrence."
 ;;   :jump t
 ;;   :type exclusive
@@ -3066,20 +2992,20 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;     (evil-repeat-record (evil-ex-pattern-regex evil-ex-search-pattern)))
 ;;    (t (evil-repeat-motion flag))))
 
-;; (evil-define-motion evil-ex-search-forward (count)
+;; (evil-define-motion evilspeak-ex-search-forward (count)
 ;;   "Starts a forward search."
 ;;   :jump t
 ;;   :type exclusive
 ;;   :repeat evil-repeat-ex-search
 ;;   (evil-ex-start-search 'forward count))
 
-;; (evil-define-motion evil-ex-search-backward (count)
+;; (evil-define-motion evilspeak-ex-search-backward (count)
 ;;   "Starts a forward search."
 ;;   :jump t
 ;;   :repeat evil-repeat-ex-search
 ;;   (evil-ex-start-search 'backward count))
 
-;; (evil-define-motion evil-ex-search-word-forward (count &optional symbol)
+;; (evil-define-motion evilspeak-ex-search-word-forward (count &optional symbol)
 ;;   "Search for the next occurrence of word under the cursor."
 ;;   :jump t
 ;;   :type exclusive
@@ -3087,7 +3013,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                      evil-symbol-word-search))
 ;;   (evil-ex-start-word-search nil 'forward count symbol))
 
-;; (evil-define-motion evil-ex-search-word-backward (count &optional symbol)
+;; (evil-define-motion evilspeak-ex-search-word-backward (count &optional symbol)
 ;;   "Search for the next occurrence of word under the cursor."
 ;;   :jump t
 ;;   :type exclusive
@@ -3095,7 +3021,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                      evil-symbol-word-search))
 ;;   (evil-ex-start-word-search nil 'backward count symbol))
 
-;; (evil-define-motion evil-ex-search-unbounded-word-forward (count &optional symbol)
+;; (evil-define-motion evilspeak-ex-search-unbounded-word-forward (count &optional symbol)
 ;;   "Search for the next occurrence of word under the cursor."
 ;;   :jump t
 ;;   :type exclusive
@@ -3103,7 +3029,7 @@ If COUNT is given, move COUNT - 1 screen lines downward first."
 ;;                      evil-symbol-word-search))
 ;;   (evil-ex-start-word-search t 'forward count symbol))
 
-;; (evil-define-motion evil-ex-search-unbounded-word-backward (count &optional symbol)
+;; (evil-define-motion evilspeak-ex-search-unbounded-word-backward (count &optional symbol)
 ;;   "Search for the next occurrence of word under the cursor."
 ;;   :jump t
 ;;   :type exclusive
