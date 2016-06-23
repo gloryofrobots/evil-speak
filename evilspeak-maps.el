@@ -214,5 +214,6 @@
 ;;   evil-command-window-mode-map (kbd "RET") 'evilspeak-command-window-execute)
 ;; (evil-define-key 'insert
 ;;   evil-command-window-mode-map (kbd "RET") 'evilspeak-command-window-execute)
+;; (global-unset-key "\C-e")
 
 (provide 'evilspeak-maps)

@@ -1,4 +1,4 @@
-(require 'emacspeak)
+;; (require 'emacspeak)
 (require 'evil)
 
 (defun evilspeak-speak-line (&optional count)
