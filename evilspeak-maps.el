@@ -72,9 +72,20 @@
 (define-key evil-motion-state-map "_" 'evilspeak-next-line-1-first-non-blank)
 (define-key evil-motion-state-map "-" 'evilspeak-previous-line-first-non-blank)
 (define-key evil-motion-state-map "\C-]" 'evilspeak-jump-to-tag)
-(define-key evil-motion-state-map (kbd "C-b") 'evilspeak-scroll-page-up)
+
+;; SCROLL
+
 (define-key evil-motion-state-map (kbd "C-d") 'evilspeak-scroll-down)
+(define-key evil-motion-state-map (kbd "C-D") 'evilspeak-scroll-up)
+
+(define-key evil-motion-state-map (kbd "C-b") 'evilspeak-scroll-page-up)
 (define-key evil-motion-state-map (kbd "C-f") 'evilspeak-scroll-page-down)
+
+(define-key evil-motion-state-map (kbd "zu") 'evilspeak-scroll-line-up)
+(define-key evil-motion-state-map (kbd "zd") 'evilspeak-scroll-line-down)
+
+;;;;;
+
 (define-key evil-motion-state-map (kbd "RET") 'evilspeak-ret)
 
 (define-key evil-motion-state-map [left] 'evilspeak-backward-char)

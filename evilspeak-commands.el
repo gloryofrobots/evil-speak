@@ -1,8 +1,14 @@
 ;; (require 'emacspeak)
 (require 'evil)
 
-(defun evilspeak-speak-line (&optional count)
-  (emacspeak-speak-line count))
+(defun evilspeak-speak-line-forward ()
+  (emacspeak-speak-line 1))
+
+(defun evilspeak-speak-line-backward ()
+  (emacspeak-speak-line -1))
+
+(defun evilspeak-speak-line ()
+  (emacspeak-speak-line))
 
 (defun evilspeak-speak-char ()
   (emacspeak-speak-char t))
@@ -41,6 +47,8 @@ Movement is restricted to the current line unless CROSSLINES is non-nil.
 If NOERROR is non-nil, don't signal an error upon reaching the end
 of the line or the buffer; just return nil."
   :type exclusive
+  (interactive "<c>" (list evil-cross-lines
+                           (evil-kbd-macro-suppress-motion-error)))
   (evil-forward-char count crosslines noerror)
   (evilspeak-speak-char))
 
@@ -50,6 +58,8 @@ Movement is restricted to the current line unless CROSSLINES is non-nil.
 If NOERROR is non-nil, don't signal an error upon reaching the beginning
 of the line or the buffer; just return nil."
   :type exclusive
+  (interactive "<c>" (list evil-cross-lines
+                           (evil-kbd-macro-suppress-motion-error)))
   (evil-backward-char count crosslines noerror)
   (evilspeak-speak-char))
 
@@ -312,6 +322,7 @@ and jump to the corresponding one."
 (evil-define-motion evilspeak-find-char (count char)
   "Move to the next COUNT'th occurrence of CHAR."
   :type inclusive
+  (interactive "<c><C>")
   (evil-find-char count char)
   (evilspeak-speak-word))
 
@@ -319,18 +330,21 @@ and jump to the corresponding one."
 (evil-define-motion evilspeak-find-char-backward (count char)
   "Move to the previous COUNT'th occurrence of CHAR."
   :type exclusive
+  (interactive "<c><C>")
   (evil-find-char-backward count char)
   (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-find-char-to (count char)
   "Move before the next COUNT'th occurrence of CHAR."
   :type inclusive
+  (interactive "<c><C>")
   (evil-find-char-to count char)
   (evilspeak-speak-word))
 
 (evil-define-motion evilspeak-find-char-to-backward (count char)
   "Move before the previous COUNT'th occurrence of CHAR."
   :type exclusive
+  (interactive "<c><C>")
   (evil-find-char-to-backward count char)
   (evilspeak-speak-word))
 
@@ -350,29 +364,31 @@ and jump to the corresponding one."
   "Go to column COUNT on the current line.
 Columns are counted from zero."
   :type exclusive
-  (evil-goto-column)
-  (evilspeak-speak-line t))
+  (evil-goto-column count)
+  (evilspeak-speak-line-forward))
 
 (evil-define-command evilspeak-goto-mark (char &optional noerror)
   "Go to the marker specified by CHAR."
   :keep-visual t
   :repeat nil
   :type exclusive
+  (interactive (list (read-char)))
   (evil-goto-mark char noerror)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-command evilspeak-goto-mark-line (char &optional noerror)
   "Go to the line of the marker specified by CHAR."
   :keep-visual t
   :repeat nil
   :type line
+  (interactive (list (read-char)))
   (evil-goto-mark-line char noerror)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-motion evilspeak-jump-backward (count)
   "Go to older position in jump list."
   (evil-jump-backward count)
-  (evilspeak-speak-line))
+  (evilspeak-speak-long-jump))
 
 (evil-define-motion evilspeak-jump-forward (count)
   "Go to newer position in jump list.
@@ -392,6 +408,7 @@ The current position is placed in the jump list."
 If called with a prefix argument, provide a prompt
 for specifying the tag."
   :jump t
+  (interactive "P")
   (evil-jump-to-tag arg)
   (evilspeak-speak-long-jump))
 
@@ -441,7 +458,51 @@ on the first non-blank character."
   :type line
   (evil-window-bottom count)
   (evilspeak-speak-line))
-;; scroll skipped
+
+(evil-define-command evilspeak-scroll-line-down (count) ;
+  :repeat nil
+  (interactive "<c>")
+  ;; (evil-scroll-line-down count)
+  (emacspeak-read-next-line count))
+
+(evil-define-command evilspeak-scroll-line-up (count) ;
+  :repeat nil
+  (interactive "<c>")
+  ;; (evil-scroll-line-up count)
+  (emacspeak-read-previous-line count))
+
+(evil-define-command evilspeak-scroll-up (count) ;
+  :repeat nil
+  :keep-visual t
+  (interactive "<c>")
+  (evil-scroll-up count)
+  (evilspeak-speak-line))
+
+(evil-define-command evilspeak-scroll-down (count) ;
+  :repeat nil
+  :keep-visual t
+  (interactive "<c>")
+  (evil-scroll-down count)
+  (evilspeak-speak-line))
+
+
+(evil-define-command evilspeak-scroll-page-up (count)
+  "Scrolls the window COUNT pages upwards."
+  :repeat nil
+  :keep-visual t
+  (interactive "p")
+  (evil-scroll-page-up count)
+  (evilspeak-speak-line))
+
+(evil-define-command evilspeak-scroll-page-down (count)
+  "Scrolls the window COUNT pages upwards."
+  :repeat nil
+  :keep-visual t
+  (interactive "p")
+  (evil-scroll-page-down count)
+  (evilspeak-speak-line))
+;; skip other scroll functions
+
 ;; text-object skipped
 
 ;; ;;; Operator commands
@@ -452,7 +513,7 @@ on the first non-blank character."
   "Delete text from BEG to END with TYPE.
 Save in REGISTER or in the kill-ring with YANK-HANDLER."
   (evil-delete beg end type register yank-handler)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-operator evilspeak-delete-line
   (beg end type register yank-handler)
@@ -460,14 +521,14 @@ Save in REGISTER or in the kill-ring with YANK-HANDLER."
   :motion nil
   :keep-visual t
   (evil-delete-line beg end type register yank-handler)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-operator evilspeak-delete-whole-line
   (beg end type register yank-handler)
   "Delete whole line."
   :motion evil-line
   (evil-delete-whole-line beg end type register yank-handler)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-operator evilspeak-delete-char (beg end type register)
   "Delete next character."
@@ -568,7 +629,7 @@ The return value is the yanked text."
 The return value is the yanked text."
   :suppress-operator t
   (evil-paste-after count register yank-handler)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 
 ;; ;;; Visual commands
@@ -755,7 +816,7 @@ command."
   "Go to POSITION in the buffer.
 Default position is the beginning of the buffer."
   (evil-goto-char position)
-  (evilspeak-speak-line t))
+  (evilspeak-speak-line-forward))
 
 (evil-define-command evilspeak-force-normal-state ()
   "Switch to normal state without recording current command."
